@@ -6,9 +6,12 @@ import pymysql
 import logging
 import json
 import datetime
-logging.basicConfig(level=logging.DEBUG, filename='../log/stock_day_trade1.log', filemode='w',
+from readconfig import read_config
+logging.basicConfig(level=logging.DEBUG, filename='../log/stock_day_trade.log', filemode='w',
                     format='%(asctime)s-%(levelname)5s: %(message)s')
-db = pymysql.connect(host="127.0.0.1", user="user1", password="Zzl08382020", database="stockdb")
+db_config = read_config('db_config')
+db = pymysql.connect(host=db_config["host"], user=db_config["user"],
+                     password=db_config["password"], database=db_config["database"])
 cursor = db.cursor()
 count=0
 
