@@ -124,12 +124,19 @@ def update_other_tab():
     print('查询完成。',result)
     start_time = datetime.datetime.now()
     s= pub_uti_a.save()
+    add_count = 1
     for table in table_list:
         for tup in result:
             sql = "update {0} set stock_name='{1}',bk_name='{2}' where stock_id = '{3}'".format(table,tup[0],tup[1],tup[2])
             print('sql:', sql)
             s.add_sql(sql)
-    s.commit()
+            add_count += 1
+        if add_count%1000 == 0:
+            s.commit()
+            s = pub_uti_a.save()
+    else:
+        s.commit()
+
     print('耗时：{}'.format(datetime.datetime.now() - start_time))
 # def update_other_tab(db):
 #     table_list = ['stock_trade_data',] #stock_trade_data, monitor
