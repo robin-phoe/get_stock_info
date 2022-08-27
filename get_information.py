@@ -131,9 +131,10 @@ def update_other_tab():
             print('sql:', sql)
             s.add_sql(sql)
             add_count += 1
-        if add_count%1000 == 0:
+        if add_count%500 == 0:
             s.commit()
             s = pub_uti_a.save()
+            print('add_count:',add_count)
     else:
         s.commit()
 
