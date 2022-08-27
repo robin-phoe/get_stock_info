@@ -128,7 +128,7 @@ def update_other_tab():
     for table in table_list:
         for tup in result:
             sql = "update {0} set stock_name='{1}',bk_name='{2}' where stock_id = '{3}'".format(table,tup[0],tup[1],tup[2])
-            print('sql:', sql)
+            print('sql:', add_count,sql)
             s.add_sql(sql)
             add_count += 1
         if add_count%500 == 0:
