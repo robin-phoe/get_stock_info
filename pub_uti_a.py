@@ -104,7 +104,6 @@ commit_to_db = c_d.commit_db
 class save:
     def __init__(self):
         cd = con_db()
-        self.db.ping(reconnect=True)
         self.db = cd.creat_db()
         self.cursor = self.db.cursor()
     def add_sql(self,sql):
