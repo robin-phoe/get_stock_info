@@ -44,7 +44,7 @@ def clear_info():
     print('清除成功。')
 def get_base_info():
     #清除原数据
-    clear_info()
+    # clear_info()
     bk_map  = get_bk_relation()
     s = pub_uti_a.save()
     for num in range(0,1):
@@ -131,7 +131,8 @@ def get_data(stock_id,bk_map):
         bk_code = bk_map[dchy]
     update_time = datetime.datetime.now().strftime('%Y-%m-%d')
     sql = "insert into stock_informations(stock_id,stock_name,发行量,bk_name,证监会行业," \
-          "上市日期,曾用名,每股发行价,区域,雇员人数,经营范围,公司简介,h_table,bk_code,updatetime) " \
+          "上市日期,曾用名,每股发行价,区域,雇员人数,经营范围,公司简介,h_table,bk_code,updatetime," \
+          "total_market_value,free_market,total_share,free_share,ZCFZL,cash_flow ) " \
           "values ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}'," \
           " '{15}','{16}','{17}','{18}','{19}','{20}') " \
           "ON DUPLICATE KEY UPDATE stock_id='{0}',stock_name='{1}',发行量='{2}',bk_name='{3}'," \
