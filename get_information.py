@@ -48,7 +48,7 @@ def get_base_info():
     bk_map  = get_bk_relation()
     s = pub_uti_a.save()
     count = 1
-    for num in range(0,1000):
+    for num in range(810,1000):
         num_str = '{:0>3d}'.format(num)
         for capital_num in ['600','601','603','688','002','000','300']:
             if count % 200 == 0:
@@ -84,21 +84,26 @@ def get_data(stock_id,bk_map):
     other_data_respone = requests.get(other_data_url,headers=header)
     other_text = other_data_respone.text
     # print('other_text:', other_text)
-    res_json = json.loads(other_text)
+    try:
+        res_json = json.loads(other_text)
+    except Exception as err:
+        res_json = {}
+        logging.error('{} other data respone err:{}'.format(stock_id,other_text))
+        print('{} other data respone err:{}'.format(stock_id,other_text))
     zxzb = res_json.get("zxzb",[{}])[0] if len(res_json.get("zxzb",[{}])) else {}
     MGJYXJJE = zxzb.get("MGJYXJJE",0)
     # 流通股数
     FREE_SHARE = zxzb.get("FREE_SHARE",0)
     if not FREE_SHARE:
         FREE_SHARE = 0
-        print('FREE_SHARE is None :{}'.format(FREE_SHARE))
-        logging.warning(('FREE_SHARE is None :{}'.format(FREE_SHARE)))
+        print('FREE_SHARE is None :{}'.format(zxzb))
+        logging.warning(('FREE_SHARE is None :{}'.format(zxzb)))
     # 总股数
     TOTAL_SHARE = zxzb.get("TOTAL_SHARE",0)
     if not TOTAL_SHARE:
         TOTAL_SHARE = 0
-        print('TOTAL_SHARE is None :{}'.format(TOTAL_SHARE))
-        logging.warning(('TOTAL_SHARE is None :{}'.format(TOTAL_SHARE)))
+        print('TOTAL_SHARE is None :{}'.format(zxzb))
+        logging.warning(('TOTAL_SHARE is None :{}'.format(zxzb)))
     #现金流
     cash_flow = MGJYXJJE * TOTAL_SHARE
     #总市值
