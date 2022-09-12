@@ -223,11 +223,11 @@ def main(update_flag = 0):
 
 
 if __name__ == '__main__':
-    # main(update_flag = 0)
+    main(update_flag = 0)
 
     #test
-    stock_id ='002553'
-    bk_map = get_bk_relation()
-    get_data(stock_id, bk_map)
+    # stock_id ='002553'
+    # bk_map = get_bk_relation()
+    # get_data(stock_id, bk_map)
 
 
