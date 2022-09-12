@@ -84,18 +84,18 @@ def get_data(stock_id,bk_map):
     other_text = other_data_respone.text
     # print('other_text:', other_text)
     res_json = json.loads(other_text)
-    MGJYXJJE = res_json.get("zxzb",[])[0].get("MGJYXJJE",0)
+    MGJYXJJE = res_json.get("zxzb",[{}])[0].get("MGJYXJJE",0)
     print()
     # 流通股数
-    FREE_SHARE = res_json.get("zxzb",[])[0].get("FREE_SHARE",0)
+    FREE_SHARE = res_json.get("zxzb",[{}])[0].get("FREE_SHARE",0)
     print()
     # 总股数
-    TOTAL_SHARE = res_json.get("zxzb",[])[0].get("TOTAL_SHARE",0)
+    TOTAL_SHARE = res_json.get("zxzb",[{}])[0].get("TOTAL_SHARE",0)
     #现金流
     cash_flow = MGJYXJJE * TOTAL_SHARE
     print()
     #总市值
-    TOTAL_MARKET_CAP = res_json.get("zxzbOther",[])[0].get("TOTAL_MARKET_CAP",0)
+    TOTAL_MARKET_CAP = res_json.get("zxzbOther",[{}])[0].get("TOTAL_MARKET_CAP",0)
     #流通市值
     free_market= 0
     if FREE_SHARE != 0:
