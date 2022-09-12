@@ -59,7 +59,7 @@ def get_base_info():
             if sql:
                 s.add_sql(sql)
                 count +=1
-                print('count:',count)
+                print(num_str,stock_id,'count:',count)
     else:
         s.commit()
 def get_data(stock_id,bk_map):
@@ -87,18 +87,18 @@ def get_data(stock_id,bk_map):
     res_json = json.loads(other_text)
     zxzb = res_json.get("zxzb",[{}])[0] if len(res_json.get("zxzb",[{}])) else {}
     MGJYXJJE = zxzb.get("MGJYXJJE",0)
-    print()
     # 流通股数
     FREE_SHARE = zxzb.get("FREE_SHARE",0)
-    print()
     # 总股数
     TOTAL_SHARE = zxzb.get("TOTAL_SHARE",0)
     #现金流
     cash_flow = MGJYXJJE * TOTAL_SHARE
-    print()
     #总市值
     zxzbOther = res_json.get("zxzbOther", [{}])[0] if len(res_json.get("zxzbOther", [{}])) else {}
     TOTAL_MARKET_CAP = zxzbOther.get("TOTAL_MARKET_CAP",0)
+    #避错
+    if not TOTAL_MARKET_CAP:
+        TOTAL_MARKET_CAP = 0
     #流通市值
     free_market= 0
     if FREE_SHARE != 0:
