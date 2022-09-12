@@ -51,7 +51,7 @@ def get_base_info():
     for num in range(0,1000):
         num_str = '{:0>3d}'.format(num)
         for capital_num in ['600','601','603','688','002','000','300']:
-            if count % 2 == 0:
+            if count % 200 == 0:
                 s.commit()
                 s = pub_uti_a.save()
             stock_id = capital_num + num_str
@@ -102,6 +102,7 @@ def get_data(stock_id,bk_map):
     free_market= 0
     if FREE_SHARE != 0:
         free_market = TOTAL_MARKET_CAP*(TOTAL_SHARE/FREE_SHARE)
+    else:
         print('other 数据为空')
     print()
     zyzb = res_json.get("zyzb", [{}])[0] if len(res_json.get("zyzb", [{}])) else {}
