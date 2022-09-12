@@ -47,7 +47,7 @@ def get_base_info():
     clear_info()
     bk_map  = get_bk_relation()
     s = pub_uti_a.save()
-    for num in range(0,1000):
+    for num in range(0,1):
         num_str = '{:0>3d}'.format(num)
         for capital_num in ['600','601','603','688','002','000','300']:
             stock_id = capital_num + num_str
