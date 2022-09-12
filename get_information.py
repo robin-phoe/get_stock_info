@@ -59,6 +59,7 @@ def get_base_info():
             if sql:
                 s.add_sql(sql)
                 count +=1
+                print('count:',count)
     else:
         s.commit()
 def get_data(stock_id,bk_map):
@@ -75,7 +76,7 @@ def get_data(stock_id,bk_map):
     header={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36'}
     response = requests.get(url,headers=header)
     text=response.text
-    print('text:',text)
+    # print('text:',text)
     if text.find('股票代码不合法') != -1:
         print('flag')
         return None
@@ -155,7 +156,7 @@ def get_data(stock_id,bk_map):
     # sql="update stock_informations set 发行量={0},bk_name='{1}', 证监会行业='{2}', 上市日期='{3}', 曾用名='{4}', 每股发行价='{5}', 区域='{6}', \
     #     雇员人数='{7}', 经营范围='{8}', 公司简介='{9}' where stock_id = '{10}'\
     #     ".format(fxl,dchy,zjhy,ssrq,cym,mgfxj,qy,gyrs,jyfw,gsjj,stock_id)
-    print('sql',sql)
+    # print('sql',sql)
     return sql
 
 
