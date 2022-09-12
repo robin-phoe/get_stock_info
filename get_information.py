@@ -100,6 +100,7 @@ def get_data(stock_id,bk_map):
     free_market= 0
     if FREE_SHARE != 0:
         free_market = TOTAL_MARKET_CAP*(TOTAL_SHARE/FREE_SHARE)
+        print('other 数据为空')
     print()
     ZCFZL = res_json.get("zyzb",[])[0].get("ZCFZL",0)
     print()
