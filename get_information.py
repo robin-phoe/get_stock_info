@@ -76,7 +76,7 @@ def get_data(stock_id,bk_map):
     #获取其他数据
     other_data_respone = requests.get(other_data_url,headers=header)
     other_text = other_data_respone.text
-    print('other_text:', other_text)
+    # print('other_text:', other_text)
     res_json = json.loads(other_text)
     MGJYXJJE = res_json.get("zxzb",[])[0].get("MGJYXJJE",0)
     print()
