@@ -89,8 +89,16 @@ def get_data(stock_id,bk_map):
     MGJYXJJE = zxzb.get("MGJYXJJE",0)
     # 流通股数
     FREE_SHARE = zxzb.get("FREE_SHARE",0)
+    if not FREE_SHARE:
+        FREE_SHARE = 0
+        print('FREE_SHARE is None :{}'.format(FREE_SHARE))
+        logging.warning(('FREE_SHARE is None :{}'.format(FREE_SHARE)))
     # 总股数
     TOTAL_SHARE = zxzb.get("TOTAL_SHARE",0)
+    if not TOTAL_SHARE:
+        TOTAL_SHARE = 0
+        print('TOTAL_SHARE is None :{}'.format(TOTAL_SHARE))
+        logging.warning(('TOTAL_SHARE is None :{}'.format(TOTAL_SHARE)))
     #现金流
     cash_flow = MGJYXJJE * TOTAL_SHARE
     #总市值
@@ -99,6 +107,8 @@ def get_data(stock_id,bk_map):
     #避错
     if not TOTAL_MARKET_CAP:
         TOTAL_MARKET_CAP = 0
+        print('TOTAL_MARKET_CAP is None :{}'.format(zxzbOther))
+        logging.warning(('TOTAL_MARKET_CAP is None :{}'.format(zxzbOther)))
     #流通市值
     free_market= 0
     if FREE_SHARE != 0:
