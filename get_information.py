@@ -56,10 +56,14 @@ def get_base_info():
                 s.add_sql(sql)
     s.commit()
 def get_data(stock_id,bk_map):
+    #基础数据
     if stock_id[0]=='6':
         url = "http://f10.eastmoney.com/CompanySurvey/CompanySurveyAjax?code=SH{}".format(stock_id)
+        other_data_url = "http://emweb.securities.eastmoney.com/PC_HSF10/OperationsRequired/PageAjax?code=SH{}".format(stock_id)
     elif stock_id[0]=='0' or stock_id[0]=='3':
         url = "http://f10.eastmoney.com/CompanySurvey/CompanySurveyAjax?code=SZ{}".format(stock_id)
+        other_data_url = "http://emweb.securities.eastmoney.com/PC_HSF10/OperationsRequired/PageAjax?code=SZ{}".format(
+            stock_id)
     else:
         return None
     header={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36'}
@@ -69,6 +73,30 @@ def get_data(stock_id,bk_map):
     if text.find('股票代码不合法') != -1:
         print('flag')
         return None
+    #获取其他数据
+    other_data_respone = requests.get(other_data_url,headers=header)
+    other_text = other_data_respone.text
+    print('other_text:', other_text)
+    res_json = json.loads(other_text)
+    MGJYXJJE = res_json.get("zxzb",[])[0].get("MGJYXJJE",0)
+    print()
+    # 流通股数
+    FREE_SHARE = res_json.get("zxzb",[])[0].get("FREE_SHARE",0)
+    print()
+    # 总股数
+    TOTAL_SHARE = res_json.get("zxzb",[])[0].get("TOTAL_SHARE",0)
+    #现金流
+    cash_flow = MGJYXJJE * TOTAL_SHARE
+    print()
+    #总市值
+    TOTAL_MARKET_CAP = res_json.get("zxzbOther",[])[0].get("TOTAL_MARKET_CAP",0)
+    #流通市值
+    free_market= 0
+    if FREE_SHARE != 0:
+        free_market = TOTAL_MARKET_CAP*(TOTAL_SHARE/FREE_SHARE)
+    print()
+    ZCFZL = res_json.get("zyzb",[])[0].get("ZCFZL",0)
+    print()
     #print('text:',text)
     cym=re.findall('"cym":"(.*?)"',text)[0]
     dchy=re.findall('"sshy":"(.*?)"',text)[0]
@@ -104,11 +132,14 @@ def get_data(stock_id,bk_map):
     update_time = datetime.datetime.now().strftime('%Y-%m-%d')
     sql = "insert into stock_informations(stock_id,stock_name,发行量,bk_name,证监会行业," \
           "上市日期,曾用名,每股发行价,区域,雇员人数,经营范围,公司简介,h_table,bk_code,updatetime) " \
-          "values ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}') " \
+          "values ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}'," \
+          " '{15}','{16}','{17}','{18}','{19}','{20}') " \
           "ON DUPLICATE KEY UPDATE stock_id='{0}',stock_name='{1}',发行量='{2}',bk_name='{3}'," \
           "证监会行业='{4}',上市日期='{5}',曾用名='{6}',每股发行价='{7}',区域='{8}',雇员人数='{9}',经营范围='{10}'" \
-          ",公司简介='{11}',h_table='{12}',bk_code='{13}',updatetime = '{14}'" \
-        .format(stock_id,agjc,fxl,dchy,zjhy,ssrq,cym,mgfxj,qy,gyrs,jyfw,gsjj,h_table,bk_code,update_time)
+          ",公司简介='{11}',h_table='{12}',bk_code='{13}',updatetime = '{14}',total_market_value='{15}'," \
+          "free_market='{16}',total_share='{17}',free_share='{18}',ZCFZL='{19}',cash_flow='{20}' " \
+        .format(stock_id,agjc,fxl,dchy,zjhy,ssrq,cym,mgfxj,qy,gyrs,jyfw,gsjj,h_table,bk_code,update_time,
+                TOTAL_MARKET_CAP,free_market,TOTAL_SHARE,FREE_SHARE,ZCFZL,cash_flow)
     # sql="update stock_informations set 发行量={0},bk_name='{1}', 证监会行业='{2}', 上市日期='{3}', 曾用名='{4}', 每股发行价='{5}', 区域='{6}', \
     #     雇员人数='{7}', 经营范围='{8}', 公司简介='{9}' where stock_id = '{10}'\
     #     ".format(fxl,dchy,zjhy,ssrq,cym,mgfxj,qy,gyrs,jyfw,gsjj,stock_id)
@@ -192,11 +223,11 @@ def main(update_flag = 0):
 
 
 if __name__ == '__main__':
-    main(update_flag = 2)
+    # main(update_flag = 0)
 
     #test
-    # stock_id ='600824'
-    # bk_map = get_bk_relation()
-    # get_data(stock_id, bk_map)
+    stock_id ='002553'
+    bk_map = get_bk_relation()
+    get_data(stock_id, bk_map)
 
 
