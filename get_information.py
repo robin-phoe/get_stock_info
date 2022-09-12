@@ -84,25 +84,28 @@ def get_data(stock_id,bk_map):
     other_text = other_data_respone.text
     # print('other_text:', other_text)
     res_json = json.loads(other_text)
-    MGJYXJJE = res_json.get("zxzb",[{}])[0].get("MGJYXJJE",0)
+    zxzb = res_json.get("zxzb",[{}])[0] if len(res_json.get("zxzb",[{}])) else {}
+    MGJYXJJE = zxzb.get("MGJYXJJE",0)
     print()
     # 流通股数
-    FREE_SHARE = res_json.get("zxzb",[{}])[0].get("FREE_SHARE",0)
+    FREE_SHARE = zxzb.get("FREE_SHARE",0)
     print()
     # 总股数
-    TOTAL_SHARE = res_json.get("zxzb",[{}])[0].get("TOTAL_SHARE",0)
+    TOTAL_SHARE = zxzb.get("TOTAL_SHARE",0)
     #现金流
     cash_flow = MGJYXJJE * TOTAL_SHARE
     print()
     #总市值
-    TOTAL_MARKET_CAP = res_json.get("zxzbOther",[{}])[0].get("TOTAL_MARKET_CAP",0)
+    zxzbOther = res_json.get("zxzbOther", [{}])[0] if len(res_json.get("zxzbOther", [{}])) else {}
+    TOTAL_MARKET_CAP = zxzbOther.get("TOTAL_MARKET_CAP",0)
     #流通市值
     free_market= 0
     if FREE_SHARE != 0:
         free_market = TOTAL_MARKET_CAP*(TOTAL_SHARE/FREE_SHARE)
         print('other 数据为空')
     print()
-    ZCFZL = res_json.get("zyzb",[])[0].get("ZCFZL",0)
+    zyzb = res_json.get("zyzb", [{}])[0] if len(res_json.get("zyzb", [{}])) else {}
+    ZCFZL = zyzb.get("ZCFZL",0)
     print()
     #print('text:',text)
     cym=re.findall('"cym":"(.*?)"',text)[0]
