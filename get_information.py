@@ -248,7 +248,7 @@ def supplement_data():
     info_sql = "select stock_id from stock_informations "
     info_set = set(pub_uti_a.creat_df(info_sql)['stock_id'].to_list())
     id_det = trade_set - info_set
-    print('id_det:',id_det)
+    print('id_det:',len(id_det),id_det)
     bk_map  = get_bk_relation()
     s = pub_uti_a.save()
     count = 1
