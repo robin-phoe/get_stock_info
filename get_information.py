@@ -243,9 +243,9 @@ def update_other_tab():
 #补充缺失数据
 def supplement_data():
     #求get_info 与 day_trade 差集合
-    trade_sql = "selecyt distinct stock_id from stock_trade_data "
+    trade_sql = "select distinct stock_id from stock_trade_data "
     trade_set = set(pub_uti_a.creat_df(trade_sql)['stock_id'].to_list())
-    info_sql = "selecyt stock_id from stock_informations "
+    info_sql = "select stock_id from stock_informations "
     info_set = set(pub_uti_a.creat_df(info_sql)['stock_id'].to_list())
     id_det = trade_set - info_set
     print('id_det:',id_det)
