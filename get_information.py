@@ -48,7 +48,7 @@ def get_base_info():
     bk_map  = get_bk_relation()
     s = pub_uti_a.save()
     count = 1
-    for num in range(810,1000):
+    for num in range(1,1000):
         num_str = '{:0>3d}'.format(num)
         for capital_num in ['600','601','603','688','002','000','300']:
             if count % 200 == 0:
@@ -240,6 +240,29 @@ def update_other_tab():
 #     #     logging.error('存储失败:id:{},{}'.format(stock_id, err))
 #     cursor.close()
 
+#补充缺失数据
+def supplement_data():
+    #求get_info 与 day_trade 差集合
+    trade_sql = "selecyt distinct stock_id from stock_trade_data "
+    trade_set = set(pub_uti_a.creat_df(trade_sql)['stock_id'].to_list())
+    info_sql = "selecyt stock_id from stock_informations "
+    info_set = set(pub_uti_a.creat_df(info_sql)['stock_id'].to_list())
+    id_det = trade_set - info_set
+    print('id_det:',id_det)
+    bk_map  = get_bk_relation()
+    s = pub_uti_a.save()
+    count = 1
+    for stock_id in id_det:
+        if count % 200 == 0:
+            s.commit()
+            s = pub_uti_a.save()
+        sql = get_data(stock_id, bk_map)
+        if sql:
+            s.add_sql(sql)
+            count +=1
+            print(stock_id,'count:',count)
+    else:
+        s.commit()
 def main(update_flag = 0):
     if update_flag ==1:
         get_base_info()
@@ -251,8 +274,8 @@ def main(update_flag = 0):
 
 
 if __name__ == '__main__':
-    main(update_flag = 0)
-
+    # main(update_flag = 0)
+    supplement_data()
     #test
     # stock_id ='002553'
     # bk_map = get_bk_relation()
